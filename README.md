@@ -24,4 +24,4 @@ In this example a single antenna I/Q capture of an eNodeB with two transmit ante
 
 Call lteCellSearch to obtain the cell identity and timing offset offset to the first frame head. The cell search is repeated for each combination of cyclic prefix length and duplex mode, and the combination with the strongest correlation allows these parameters to be identified. A plot of the correlation between the received signal and the PSS/SSS for the detected cell identity is produced. The PSS is detected using time-domain correlation and the SSS is detected using frequency-domain correlation. Prior to SSS detection, frequency offset estimation/correction using cyclic prefix correlation is performed. The time-domain PSS detection is robust to small frequency offsets but larger offsets may degrade the PSS correlation.
 
-![GitHub Logo](C:\Users\BUGRAHAN\Desktop\1.png)
+<img src="C:\Users\BUGRAHAN\Desktop\1.pnp" alt="parameter">
