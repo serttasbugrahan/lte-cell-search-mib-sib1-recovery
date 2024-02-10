@@ -45,5 +45,23 @@ A conservative 13-by-9 pilot averaging window is used, in frequency and time, to
 
 The MIB is now decoded along with the number of cell-specific reference signal ports transmitted as a mask on the BCH CRC. The function ltePBCHDecode establishes frame timing modulo 4 and returns this in the nfmod4 parameter. It also returns the MIB bits in vector mib and the true number of cell-specific reference signal ports which is assigned into enb.CellRefP at the output of this function call. If the number of cell-specific reference signal ports is decoded as enb.CellRefP=0, this indicates a failure to decode the BCH. The function lteMIB is used to parse the bit vector mib and add the relevant fields to the configuration structure enb. After MIB decoding, the detected bandwidth is present in enb.NDLRB.
 
+<img width="200" alt="Ekran görüntüsü 2024-02-10 123800" src="https://github.com/serttasbugrahan/lte-cell-search-mib-sib1-recovery/assets/140887398/0c8344b1-9478-494f-8e2d-030a24f524e8">
 
+## SIB1 Decoding
+
+The following steps are performed in this section:
+
+- Physical Control Format Indicator Channel (PCFICH) demodulation, CFI decoding
+
+- PDCCH decoding
+
+- Blind PDCCH search
+
+- SIB bits recovery: PDSCH demodulation and DL-SCH decoding
+
+- Buffering and resetting of the DL-SCH HARQ state
+
+After recovery the SIB CRC should be 0.
+
+These decoding steps are performed in a loop for each occurrence of a subframe carrying SIB1 in the received signal. As mentioned above, the SIB1 is transmitted in subframe 5 of every even frame, so the input signal is first checked to establish that at least one occurrence of SIB1 is present. For each SIB1 subframe, the channel estimate magnitude response is plotted, as is the constellation of the received PDCCH.
 
