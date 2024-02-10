@@ -24,4 +24,26 @@ In this example a single antenna I/Q capture of an eNodeB with two transmit ante
 
 Call lteCellSearch to obtain the cell identity and timing offset offset to the first frame head. The cell search is repeated for each combination of cyclic prefix length and duplex mode, and the combination with the strongest correlation allows these parameters to be identified. A plot of the correlation between the received signal and the PSS/SSS for the detected cell identity is produced. The PSS is detected using time-domain correlation and the SSS is detected using frequency-domain correlation. Prior to SSS detection, frequency offset estimation/correction using cyclic prefix correlation is performed. The time-domain PSS detection is robust to small frequency offsets but larger offsets may degrade the PSS correlation.
 
-<img width="197" alt="1" src="https://github.com/serttasbugrahan/lte-cell-search-mib-sib1-recovery/assets/140887398/c522f317-3f25-4c77-964d-da34cb4d5bd4">
+<img width="250" alt="1" src="https://github.com/serttasbugrahan/lte-cell-search-mib-sib1-recovery/assets/140887398/c522f317-3f25-4c77-964d-da34cb4d5bd4">
+
+## Frequency Offset Estimation and Correction
+
+Prior to OFDM demodulation, any significant frequency offset must be removed. The frequency offset in the I/Q waveform is estimated and corrected using lteFrequencyOffset and lteFrequencyCorrect. The frequency offset is estimated by means of correlation of the cyclic prefix and therefore can estimate offsets up to +/- half the subcarrier spacing i.e. +/- 7.5kHz.
+
+_Performing frequency offset estimation..._
+_Frequency offset: -14.902Hz_
+
+## OFDM Demodulation and Channel Estimation
+
+The OFDM downsampled I/Q waveform is demodulated to produce a resource grid rxgrid. This is used to perform channel estimation. hest is the channel estimate, nest is an estimate of the noise (for MMSE equalization) and cec is the channel estimator configuration.
+
+For channel estimation the example assumes 4 cell specific reference signals. This means that channel estimates to each receiver antenna from all possible cell-specific reference signal ports are available. The true number of cell-specific reference signal ports is not yet known. The channel estimation is only performed on the first subframe, i.e. using the first L OFDM symbols in rxgrid.
+
+A conservative 13-by-9 pilot averaging window is used, in frequency and time, to reduce the impact of noise on pilot estimates during channel estimation.
+
+## PBCH Demodulation, BCH Decoding, MIB Parsing
+
+The MIB is now decoded along with the number of cell-specific reference signal ports transmitted as a mask on the BCH CRC. The function ltePBCHDecode establishes frame timing modulo 4 and returns this in the nfmod4 parameter. It also returns the MIB bits in vector mib and the true number of cell-specific reference signal ports which is assigned into enb.CellRefP at the output of this function call. If the number of cell-specific reference signal ports is decoded as enb.CellRefP=0, this indicates a failure to decode the BCH. The function lteMIB is used to parse the bit vector mib and add the relevant fields to the configuration structure enb. After MIB decoding, the detected bandwidth is present in enb.NDLRB.
+
+
+
